@@ -1,0 +1,7 @@
+{
+  "name": "اذكار",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
