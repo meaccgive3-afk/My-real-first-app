@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import { Navigation2, Compass, MapPin } from 'lucide-react'
 import type { StoredLocation } from '@/lib/use-location'
-import { qiblaBearing, toArabicDigits } from '@/lib/prayer-utils'
+import { qiblaBearing, localizeDigits } from '@/lib/prayer-utils'
+import { useSettings } from '@/lib/settings-context'
 
 export function QiblaScreen({ location }: { location: StoredLocation }) {
+  const { t, lang } = useSettings()
   const bearing = qiblaBearing(location.lat, location.lng)
   const [heading, setHeading] = useState<number | null>(null)
   const [enabled, setEnabled] = useState(false)
@@ -25,7 +27,6 @@ export function QiblaScreen({ location }: { location: StoredLocation }) {
     if (typeof webkitHeading === 'number') {
       setHeading(webkitHeading)
     } else if (e.alpha != null) {
-      // alpha: 0 = north, increasing counter-clockwise
       setHeading(360 - e.alpha)
     }
   }
@@ -54,15 +55,19 @@ export function QiblaScreen({ location }: { location: StoredLocation }) {
     }
   }, [])
 
-  // Rotation of the qibla pointer relative to current device heading.
   const pointerRotation = heading != null ? bearing - heading : bearing
-  // Whether the device is roughly facing the qibla
-  const aligned =
-    heading != null && Math.abs(((pointerRotation % 360) + 360) % 360) < 6
+  const aligned = heading != null && Math.abs(((pointerRotation % 360) + 360) % 360) < 6
+
+  const directionLetters = [
+    { l: 'N', a: 0 },
+    { l: 'E', a: 90 },
+    { l: 'S', a: 180 },
+    { l: 'W', a: 270 },
+  ] as const
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-md flex-col px-4 pb-28 pt-4">
-      <h1 className="mb-1 text-center font-heading text-2xl font-bold">اتجاه القبلة</h1>
+    <div className="mx-auto flex min-h-[calc(100dvh-9rem)] max-w-md flex-col px-4 pb-32 pt-2">
+      <h1 className="mb-1 text-center font-heading text-2xl font-bold">{t('qiblaDirection')}</h1>
       <p className="mb-2 flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
         <MapPin className="h-4 w-4" />
         {location.name}
@@ -70,42 +75,31 @@ export function QiblaScreen({ location }: { location: StoredLocation }) {
 
       <div className="mb-6 text-center">
         <span className="font-mono text-3xl font-bold text-primary">
-          {toArabicDigits(Math.round(bearing))}°
+          {localizeDigits(Math.round(bearing), lang)}°
         </span>
-        <span className="mr-2 text-sm text-muted-foreground">من الشمال</span>
+        <span className="mx-2 text-sm text-muted-foreground">{t('fromNorth')}</span>
       </div>
 
       {/* Compass */}
       <div className="relative mx-auto my-auto aspect-square w-full max-w-xs">
         {/* Dial */}
         <div
-          className="absolute inset-0 rounded-full border-4 border-border bg-card shadow-inner transition-transform duration-150"
+          className="absolute inset-0 rounded-full glass shadow-2xl shadow-black/10 transition-transform duration-150"
           style={{ transform: heading != null ? `rotate(${-heading}deg)` : undefined }}
         >
-          {(
-            [
-              { l: 'ش', a: 0 },
-              { l: 'ق', a: 90 },
-              { l: 'ج', a: 180 },
-              { l: 'غ', a: 270 },
-            ] as const
-          ).map(({ l, a }) => (
+          {directionLetters.map(({ l, a }) => (
             <span
               key={l}
               className="absolute left-1/2 top-3 -translate-x-1/2 text-sm font-bold text-muted-foreground"
-              style={{
-                transformOrigin: '50% calc(50vw)',
-                transform: `rotate(${a}deg)`,
-              }}
+              style={{ transformOrigin: '50% calc(50vw)', transform: `rotate(${a}deg)` }}
             >
               {l}
             </span>
           ))}
-          {/* tick marks */}
           {Array.from({ length: 24 }).map((_, i) => (
             <span
               key={i}
-              className="absolute left-1/2 top-0 h-3 w-px -translate-x-1/2 bg-border"
+              className="absolute left-1/2 top-0 h-3 w-px -translate-x-1/2 bg-foreground/20"
               style={{ transformOrigin: '50% 50vw', transform: `rotate(${i * 15}deg)` }}
             />
           ))}
@@ -124,14 +118,14 @@ export function QiblaScreen({ location }: { location: StoredLocation }) {
             >
               <Navigation2 className="h-6 w-6" fill="currentColor" />
             </span>
-            <span className="mt-1 rounded-full bg-card px-2 py-0.5 text-xs font-bold text-primary shadow ring-1 ring-border">
-              الكعبة
+            <span className="mt-1 rounded-full glass-strong px-2 py-0.5 text-xs font-bold text-primary">
+              {t('kaaba')}
             </span>
           </div>
         </div>
 
         {/* Center */}
-        <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background ring-1 ring-border">
+        <div className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full glass-strong">
           <Compass className="h-7 w-7 text-muted-foreground" />
         </div>
       </div>
@@ -141,30 +135,28 @@ export function QiblaScreen({ location }: { location: StoredLocation }) {
           <button
             type="button"
             onClick={enableCompass}
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-sm active:scale-95"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/25 active:scale-95"
           >
             <Compass className="h-5 w-5" />
-            تفعيل البوصلة
+            {t('enableCompass')}
           </button>
         ) : enabled && heading != null ? (
           <p className="text-sm text-muted-foreground">
-            {aligned ? 'أنت الآن مُتّجه نحو القبلة' : 'وجِّه الجهاز حتى يستقيم السهم نحو الأعلى'}
+            {aligned ? t('facingQibla') : t('alignArrow')}
           </p>
         ) : (
           <p className="text-sm text-muted-foreground">
-            {enabled
-              ? 'حرّك جهازك لمعايرة البوصلة'
-              : 'فعّل البوصلة لمعرفة الاتجاه بدقة، أو استعن بالزاوية أعلاه من الشمال.'}
+            {enabled ? t('calibrate') : t('compassHint')}
           </p>
         )}
         {!enabled && !needsPermission && (
           <button
             type="button"
             onClick={enableCompass}
-            className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-sm active:scale-95"
+            className="mt-3 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/25 active:scale-95"
           >
             <Compass className="h-5 w-5" />
-            تفعيل البوصلة
+            {t('enableCompass')}
           </button>
         )}
       </div>
