@@ -41,14 +41,14 @@ export function timeToDate(hhmm: string, base = new Date()): Date {
   return d
 }
 
-/** Format "HH:MM" 24h into Arabic 12h string with ص/م. */
-export function formatTime12(hhmm: string): { time: string; period: string } {
+/** Format "HH:MM" 24h into a 12h string, returning the time and whether it's PM. */
+export function formatTime12(hhmm: string): { time: string; isPM: boolean } {
   const [hRaw, m] = hhmm.split(':').map((n) => parseInt(n, 10))
-  const period = hRaw >= 12 ? 'مساءً' : 'صباحاً'
+  const isPM = hRaw >= 12
   let h = hRaw % 12
   if (h === 0) h = 12
   const mm = m.toString().padStart(2, '0')
-  return { time: `${h}:${mm}`, period }
+  return { time: `${h}:${mm}`, isPM }
 }
 
 export type NextPrayerInfo = {
@@ -111,6 +111,12 @@ export function formatCountdown(ms: number): string {
 export function toArabicDigits(input: string | number): string {
   const map = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']
   return input.toString().replace(/[0-9]/g, (d) => map[parseInt(d, 10)])
+}
+
+/** Localize digits: Arabic-Indic for ar/ur, western otherwise. */
+export function localizeDigits(input: string | number, lang: string): string {
+  if (lang === 'ar' || lang === 'ur') return toArabicDigits(input)
+  return input.toString()
 }
 
 const HIJRI_MONTHS: Record<string, string> = {
