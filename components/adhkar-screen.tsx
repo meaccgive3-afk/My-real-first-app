@@ -93,7 +93,7 @@ export function AdhkarScreen() {
   )
 
   return (
-    <div className="mx-auto max-w-md px-4 pb-28 pt-4">
+    <div className="mx-auto max-w-md px-4 pb-36 pt-4">
       <h1 className="mb-1 text-center font-heading text-2xl font-bold">حصن المسلم</h1>
       <p className="mb-4 text-center text-sm text-muted-foreground">أذكار الصباح والمساء</p>
 
@@ -130,3 +130,4 @@ export function AdhkarScreen() {
     </div>
   )
 }
+
