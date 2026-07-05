@@ -66,7 +66,7 @@ export function TasbihScreen() {
   const circumference = 2 * Math.PI * R
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-md flex-col px-4 pb-28 pt-4">
+    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-md flex-col px-4 pb-36 pt-4">
       <h1 className="mb-1 text-center font-heading text-2xl font-bold">السبحة</h1>
       <p className="mb-4 text-center text-sm text-muted-foreground">اضغط في أي مكان للعدّ</p>
 

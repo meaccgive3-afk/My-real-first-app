@@ -61,7 +61,7 @@ export function QiblaScreen({ location }: { location: StoredLocation }) {
     heading != null && Math.abs(((pointerRotation % 360) + 360) % 360) < 6
 
   return (
-    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-md flex-col px-4 pb-28 pt-4">
+    <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-md flex-col px-4 pb-36 pt-4">
       <h1 className="mb-1 text-center font-heading text-2xl font-bold">اتجاه القبلة</h1>
       <p className="mb-2 flex items-center justify-center gap-1.5 text-sm text-muted-foreground">
         <MapPin className="h-4 w-4" />

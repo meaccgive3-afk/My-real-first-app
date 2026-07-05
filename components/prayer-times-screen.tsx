@@ -118,7 +118,7 @@ export function PrayerTimesScreen({
   }
 
   return (
-    <div className="mx-auto max-w-md px-4 pb-28 pt-4">
+    <div className="mx-auto max-w-md px-4 pb-36 pt-4">
       {/* Location bar */}
       <button
         type="button"

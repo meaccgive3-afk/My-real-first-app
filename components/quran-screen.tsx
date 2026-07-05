@@ -9,11 +9,12 @@ import {
   ChevronLeft,
   Loader2,
   RefreshCw,
-  X,
   ScrollText,
 } from 'lucide-react'
 import { SURAHS, BISMILLAH, stripBismillah, type SurahMeta } from '@/lib/quran-data'
 import { toArabicDigits } from '@/lib/prayer-utils'
+import { KhatmaCard } from './khatma-card'
+import { BottomSheet } from './bottom-sheet'
 import { cn } from '@/lib/utils'
 
 /* ------------------------------------------------------------------ */
@@ -94,13 +95,16 @@ function SurahList({ onSelect }: { onSelect: (n: number) => void }) {
   const lastRead = getLastRead()
 
   return (
-    <div className="mx-auto max-w-md px-4 pb-28 pt-4">
+    <div className="mx-auto max-w-md px-4 pb-36 pt-4">
       <header className="mb-4 text-center">
         <h1 className="font-heading text-3xl font-bold text-primary">القرآن الكريم</h1>
         <p className="mt-1 text-xs text-muted-foreground">
           مصحف المدينة — رواية حفص عن عاصم
         </p>
       </header>
+
+      {/* Khatma plan card */}
+      <KhatmaCard onOpenSurah={onSelect} />
 
       {/* Last read card */}
       {lastRead && (
@@ -258,7 +262,7 @@ function SurahReader({
       : null
 
   return (
-    <div className="mx-auto max-w-md px-4 pb-28 pt-4">
+    <div className="mx-auto max-w-md px-4 pb-36 pt-4">
       {/* Top bar */}
       <header className="mb-3 flex items-center justify-between gap-2">
         <button
@@ -410,7 +414,7 @@ function SurahReader({
 
       {/* Tafsir edition picker sheet */}
       {showTafsirPicker && (
-        <Sheet title="اختر التفسير" onClose={() => setShowTafsirPicker(false)}>
+        <BottomSheet title="اختر التفسير" onClose={() => setShowTafsirPicker(false)}>
           <ul className="space-y-2">
             {TAFSIR_EDITIONS.map((t) => (
               <li key={t.id}>
@@ -434,12 +438,12 @@ function SurahReader({
               </li>
             ))}
           </ul>
-        </Sheet>
+        </BottomSheet>
       )}
 
       {/* Tafsir content sheet */}
       {tafsirAyah !== null && tafsir !== 'none' && (
-        <Sheet
+        <BottomSheet
           title={`تفسير الآية ${toArabicDigits(tafsirAyah)} — ${tafsirLabel}`}
           onClose={() => setTafsirAyah(null)}
         >
@@ -452,47 +456,8 @@ function SurahReader({
               <Loader2 className="h-5 w-5 animate-spin text-primary" />
             </div>
           )}
-        </Sheet>
+        </BottomSheet>
       )}
-    </div>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/* Bottom sheet                                                        */
-/* ------------------------------------------------------------------ */
-
-function Sheet({
-  title,
-  onClose,
-  children,
-}: {
-  title: string
-  onClose: () => void
-  children: React.ReactNode
-}) {
-  return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center">
-      <button
-        type="button"
-        aria-label="إغلاق"
-        onClick={onClose}
-        className="absolute inset-0 bg-foreground/40 backdrop-blur-[2px]"
-      />
-      <div className="relative max-h-[70dvh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-background p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <h3 className="font-heading text-lg font-bold">{title}</h3>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="إغلاق"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-        {children}
-      </div>
     </div>
   )
 }
