@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - quran-app-design
+  workflow_dispatch:
 
 jobs:
   build:

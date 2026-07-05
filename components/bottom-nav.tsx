@@ -1,13 +1,14 @@
 'use client'
 
-import { Clock, BookOpen, CircleDot, Compass } from 'lucide-react'
+import { Clock, BookOpen, ScrollText, CircleDot, Compass } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-export type TabKey = 'prayers' | 'adhkar' | 'tasbih' | 'qibla'
+export type TabKey = 'prayers' | 'quran' | 'adhkar' | 'tasbih' | 'qibla'
 
 const TABS: { key: TabKey; label: string; icon: typeof Clock }[] = [
   { key: 'prayers', label: 'الصلاة', icon: Clock },
-  { key: 'adhkar', label: 'الأذكار', icon: BookOpen },
+  { key: 'quran', label: 'القرآن', icon: BookOpen },
+  { key: 'adhkar', label: 'الأذكار', icon: ScrollText },
   { key: 'tasbih', label: 'السبحة', icon: CircleDot },
   { key: 'qibla', label: 'القبلة', icon: Compass },
 ]

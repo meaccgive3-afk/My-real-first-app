@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { BottomNav, type TabKey } from './bottom-nav'
 import { PrayerTimesScreen } from './prayer-times-screen'
+import { QuranScreen } from './quran-screen'
 import { AdhkarScreen } from './adhkar-screen'
 import { TasbihScreen } from './tasbih-screen'
 import { QiblaScreen } from './qibla-screen'
@@ -23,6 +24,7 @@ export function AppShell() {
             onOpenLocation={() => setLocationOpen(true)}
           />
         )}
+        {tab === 'quran' && <QuranScreen />}
         {tab === 'adhkar' && <AdhkarScreen />}
         {tab === 'tasbih' && <TasbihScreen />}
         {tab === 'qibla' && <QiblaScreen location={location} />}

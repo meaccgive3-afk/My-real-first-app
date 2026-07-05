@@ -153,6 +153,9 @@
   .font-mono {
     font-family: 'Cairo', ui-monospace, monospace;
   }
+  .font-quran {
+    font-family: 'Amiri Quran', 'Amiri', serif;
+  }
 }
 
 /* Hide scrollbar for a more app-like feel while keeping scroll */

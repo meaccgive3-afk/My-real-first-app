@@ -12,6 +12,11 @@ import {
   Moon,
   Loader2,
   RefreshCw,
+  Bell,
+  BellOff,
+  Volume2,
+  VolumeX,
+  Square,
 } from 'lucide-react'
 import type { StoredLocation } from '@/lib/use-location'
 import {
@@ -27,6 +32,7 @@ import {
   hijriMonthName,
 } from '@/lib/prayer-utils'
 import { cn } from '@/lib/utils'
+import { useAdhan } from '@/lib/use-adhan'
 
 const PRAYER_ICONS: Record<PrayerKey, typeof Sun> = {
   Fajr: CloudSun,
@@ -98,6 +104,18 @@ export function PrayerTimesScreen({
   const next = timings ? getNextPrayer(timings, nowDate) : null
   const current = timings ? getCurrentPrayer(timings, nowDate) : null
   const hijri = data?.data?.date?.hijri
+
+  const { settings, setSettings, playing, stopAdhan, requestNotifyPermission } =
+    useAdhan(timings)
+
+  const toggleNotify = async () => {
+    if (!settings.notify) {
+      const granted = await requestNotifyPermission()
+      setSettings({ notify: granted })
+    } else {
+      setSettings({ notify: false })
+    }
+  }
 
   return (
     <div className="mx-auto max-w-md px-4 pb-28 pt-4">
@@ -184,6 +202,56 @@ export function PrayerTimesScreen({
           )}
         </div>
       </section>
+
+      {/* Adhan playing banner */}
+      {playing && (
+        <div className="mt-3 flex items-center justify-between rounded-2xl bg-gold/15 px-4 py-3 ring-1 ring-gold/40">
+          <span className="flex items-center gap-2 text-sm font-bold text-gold-foreground">
+            <Volume2 className="h-5 w-5 animate-pulse" />
+            الأذان الآن — صلاة {PRAYER_LABELS[playing]}
+          </span>
+          <button
+            type="button"
+            onClick={stopAdhan}
+            className="flex items-center gap-1.5 rounded-full bg-gold px-3 py-1.5 text-xs font-bold text-gold-foreground"
+          >
+            <Square className="h-3 w-3" />
+            إيقاف
+          </button>
+        </div>
+      )}
+
+      {/* Adhan settings */}
+      <div className="mt-3 grid grid-cols-2 gap-2.5">
+        <button
+          type="button"
+          onClick={() => setSettings({ sound: !settings.sound })}
+          aria-pressed={settings.sound}
+          className={cn(
+            'flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-sm font-bold ring-1 transition',
+            settings.sound
+              ? 'bg-primary/10 text-primary ring-primary/30'
+              : 'bg-card text-muted-foreground ring-border',
+          )}
+        >
+          {settings.sound ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+          صوت الأذان
+        </button>
+        <button
+          type="button"
+          onClick={toggleNotify}
+          aria-pressed={settings.notify}
+          className={cn(
+            'flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-sm font-bold ring-1 transition',
+            settings.notify
+              ? 'bg-primary/10 text-primary ring-primary/30'
+              : 'bg-card text-muted-foreground ring-border',
+          )}
+        >
+          {settings.notify ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4" />}
+          تنبيه الصلاة
+        </button>
+      </div>
 
       {/* Timings list */}
       {timings && (
