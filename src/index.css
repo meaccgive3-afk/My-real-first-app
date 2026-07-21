@@ -302,8 +302,8 @@
   }
 
   .mushaf-meta {
-    min-height: 3.5rem;
-    color: #777985;
+    min-height: 2.75rem;
+    color: #747681;
   }
 
   .mushaf-content {
@@ -311,27 +311,28 @@
   }
 
   .mushaf-page-text {
-    font-size: clamp(1.8rem, 7.2cqw, 3.35rem);
-    line-height: 2.08;
+    margin: 0;
+    font-size: clamp(1.4rem, 5.35cqw, 2.55rem);
+    line-height: 2.02;
     text-align: justify;
     text-align-last: right;
     text-justify: inter-word;
     font-kerning: normal;
     font-variant-ligatures: common-ligatures contextual;
-    word-spacing: 0.02em;
+    word-spacing: -0.04em;
   }
 
   .ayah-marker {
     position: relative;
-    width: 1.65em;
-    height: 1.65em;
-    border: 1px solid #777985;
-    border-radius: 50%;
+    width: 1.75em;
+    height: 1.75em;
+    border: 1px solid #747681;
+    border-radius: 46%;
     box-shadow:
       inset 0 0 0 2px #18181b,
-      inset 0 0 0 3px #777985;
+      inset 0 0 0 3px #747681;
     transform: translateY(-0.08em);
-    font-size: 0.42em;
+    font-size: 0.4em;
     font-variant-numeric: tabular-nums;
   }
 
@@ -343,22 +344,22 @@
   }
 
   .ayah-marker::before {
-    inset: -0.22em;
-    border: 1px solid #777985;
-    border-radius: 42% 58% 42% 58%;
+    inset: -0.2em;
+    border: 1px solid #747681;
+    border-radius: 50% 38%;
     rotate: 45deg;
   }
 
   .ayah-marker::after {
-    inset: 0.18em;
-    border: 1px solid #777985;
+    inset: 0.2em;
+    border: 1px solid #747681;
     border-radius: 50%;
   }
 
   .surah-banner {
-    min-height: 4.5rem;
-    border: 1px solid #777985;
-    border-radius: 0.4rem;
+    min-height: 3.2rem;
+    border: 1px solid #747681;
+    border-radius: 0.35rem;
     box-shadow: inset 0 0 0 3px #18181b, inset 0 0 0 4px #34353b;
     overflow: hidden;
   }
@@ -368,45 +369,40 @@
     content: '';
     position: absolute;
     top: 50%;
-    width: 32%;
-    height: 2.25rem;
+    width: 34%;
+    height: 1.7rem;
     translate: 0 -50%;
-    border-block: 1px solid #777985;
-    background-image: repeating-radial-gradient(
-      circle at center,
-      transparent 0 0.28rem,
-      #777985 0.3rem 0.34rem,
-      transparent 0.36rem 0.68rem
-    );
-    opacity: 0.8;
+    border-block: 1px solid #747681;
+    background:
+      radial-gradient(circle at 25% 50%, transparent 0 0.35rem, #747681 0.37rem 0.41rem, transparent 0.43rem),
+      radial-gradient(circle at 75% 50%, transparent 0 0.35rem, #747681 0.37rem 0.41rem, transparent 0.43rem);
+    opacity: 0.85;
   }
 
   .surah-banner::before {
-    right: 0.65rem;
+    right: 0.55rem;
   }
 
   .surah-banner::after {
-    left: 0.65rem;
+    left: 0.55rem;
   }
 
-  .surah-ornament {
+  .surah-title::before,
+  .surah-title::after {
+    content: '۞';
     position: absolute;
     top: 50%;
-    z-index: 1;
-    width: 2.4rem;
-    height: 2.4rem;
-    translate: 0 -50%;
-    rotate: 45deg;
-    border: 1px solid #777985;
-    background-color: #18181b;
+    translate: 0 -52%;
+    color: #747681;
+    font-size: 0.85rem;
   }
 
-  .surah-ornament-right {
-    right: 28%;
+  .surah-title::before {
+    right: 0.2rem;
   }
 
-  .surah-ornament-left {
-    left: 28%;
+  .surah-title::after {
+    left: 0.2rem;
   }
 
   .mushaf-page-number {
@@ -420,13 +416,13 @@
 
   @media (max-width: 390px) {
     .mushaf-page-text {
-      font-size: clamp(1.7rem, 7.5cqw, 2.1rem);
-      line-height: 2.02;
+      font-size: clamp(1.35rem, 5.45cqw, 1.55rem);
+      line-height: 2.05;
     }
 
     .surah-banner::before,
     .surah-banner::after {
-      width: 27%;
+      width: 31%;
     }
   }
 }

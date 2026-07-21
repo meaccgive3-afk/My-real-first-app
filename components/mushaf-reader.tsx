@@ -40,6 +40,15 @@ const pageUrl = (page: number) =>
   `https://api.alquran.cloud/v1/page/${page}/quran-uthmani`
 const SWR_OPTS = { revalidateOnFocus: false, dedupingInterval: 3_600_000 } as const
 const SWIPE_THRESHOLD = 64
+const JUZ_NAMES = [
+  'الأول', 'الثاني', 'الثالث', 'الرابع', 'الخامس', 'السادس', 'السابع',
+  'الثامن', 'التاسع', 'العاشر', 'الحادي عشر', 'الثاني عشر', 'الثالث عشر',
+  'الرابع عشر', 'الخامس عشر', 'السادس عشر', 'السابع عشر', 'الثامن عشر',
+  'التاسع عشر', 'العشرون', 'الحادي والعشرون', 'الثاني والعشرون',
+  'الثالث والعشرون', 'الرابع والعشرون', 'الخامس والعشرون',
+  'السادس والعشرون', 'السابع والعشرون', 'الثامن والعشرون',
+  'التاسع والعشرون', 'الثلاثون',
+] as const
 
 function persistLastRead(surah: number, page: number) {
   try {
@@ -167,15 +176,15 @@ export function MushafReader({
 
   return (
     <div className="mushaf-root fixed inset-0 z-[60] overflow-y-auto overscroll-none">
-      <main className="mushaf-sheet mx-auto flex min-h-dvh w-full max-w-3xl flex-col px-5 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-[max(2.25rem,env(safe-area-inset-top))] sm:px-8">
+      <main className="mushaf-sheet mx-auto flex min-h-dvh w-full max-w-3xl flex-col px-3 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-[max(2rem,env(safe-area-inset-top))] sm:px-5">
         <header className="mushaf-meta flex items-center justify-between" dir="rtl">
-          <p className="font-sans text-xl font-bold sm:text-2xl">
-            {juz ? `الجزء ${toArabicDigits(juz)}` : '\u00a0'}
+          <p className="font-sans text-base font-bold sm:text-lg">
+            {juz ? `الجزء ${JUZ_NAMES[juz - 1]}` : '\u00a0'}
           </p>
           <button
             type="button"
             onClick={onBack}
-            className="font-sans text-xl font-bold transition-opacity hover:opacity-80 sm:text-2xl"
+            className="font-sans text-base font-bold transition-opacity hover:opacity-80 sm:text-lg"
             aria-label="العودة إلى فهرس السور"
           >
             {headerSurah
@@ -215,7 +224,7 @@ export function MushafReader({
               key={page}
               dir="rtl"
               className={cn(
-                'mushaf-content pt-7 sm:pt-9',
+                'mushaf-content pt-4 sm:pt-5',
                 dragX === 0 && direction === 'next' && 'mushaf-enter-next',
                 dragX === 0 && direction === 'prev' && 'mushaf-enter-prev',
               )}
@@ -276,17 +285,15 @@ export function MushafReader({
 
 function SurahHeader({ name, showBismillah }: { name: string; showBismillah: boolean }) {
   return (
-    <div className="mb-7">
-      <div className="surah-banner relative flex items-center justify-center px-12 py-3.5">
-        <span aria-hidden="true" className="surah-ornament surah-ornament-right" />
-        <h3 className="relative z-10 font-quran text-3xl text-[#E7E7EA] sm:text-4xl">
+    <div className="mb-3">
+      <div className="surah-banner relative flex items-center justify-center px-10 py-1.5">
+        <h3 className="surah-title relative z-10 bg-[#18181B] px-5 font-quran text-2xl text-[#E3E3E6] sm:text-3xl">
           {'سُورَةُ '}
           {name}
         </h3>
-        <span aria-hidden="true" className="surah-ornament surah-ornament-left" />
       </div>
       {showBismillah && (
-        <p className="mt-6 text-center font-quran text-3xl leading-relaxed text-[#E7E7EA] sm:text-4xl">
+        <p className="mt-3 text-center font-quran text-2xl leading-relaxed text-[#E3E3E6] sm:text-3xl">
           {BISMILLAH}
         </p>
       )}
