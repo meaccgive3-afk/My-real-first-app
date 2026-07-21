@@ -288,6 +288,149 @@
   }
 }
 
+/* Screenshot-matched Quran page: flat charcoal, cool gray ornaments, no cards. */
+@layer utilities {
+  .mushaf-root {
+    --mushaf-bg: #18181b;
+    background-color: var(--mushaf-bg);
+    background-image: none;
+    color: #e7e7ea;
+  }
+
+  .mushaf-sheet {
+    background-color: #18181b;
+  }
+
+  .mushaf-meta {
+    min-height: 3.5rem;
+    color: #777985;
+  }
+
+  .mushaf-content {
+    container-type: inline-size;
+  }
+
+  .mushaf-page-text {
+    font-size: clamp(1.8rem, 7.2cqw, 3.35rem);
+    line-height: 2.08;
+    text-align: justify;
+    text-align-last: right;
+    text-justify: inter-word;
+    font-kerning: normal;
+    font-variant-ligatures: common-ligatures contextual;
+    word-spacing: 0.02em;
+  }
+
+  .ayah-marker {
+    position: relative;
+    width: 1.65em;
+    height: 1.65em;
+    border: 1px solid #777985;
+    border-radius: 50%;
+    box-shadow:
+      inset 0 0 0 2px #18181b,
+      inset 0 0 0 3px #777985;
+    transform: translateY(-0.08em);
+    font-size: 0.42em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .ayah-marker::before,
+  .ayah-marker::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .ayah-marker::before {
+    inset: -0.22em;
+    border: 1px solid #777985;
+    border-radius: 42% 58% 42% 58%;
+    rotate: 45deg;
+  }
+
+  .ayah-marker::after {
+    inset: 0.18em;
+    border: 1px solid #777985;
+    border-radius: 50%;
+  }
+
+  .surah-banner {
+    min-height: 4.5rem;
+    border: 1px solid #777985;
+    border-radius: 0.4rem;
+    box-shadow: inset 0 0 0 3px #18181b, inset 0 0 0 4px #34353b;
+    overflow: hidden;
+  }
+
+  .surah-banner::before,
+  .surah-banner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 32%;
+    height: 2.25rem;
+    translate: 0 -50%;
+    border-block: 1px solid #777985;
+    background-image: repeating-radial-gradient(
+      circle at center,
+      transparent 0 0.28rem,
+      #777985 0.3rem 0.34rem,
+      transparent 0.36rem 0.68rem
+    );
+    opacity: 0.8;
+  }
+
+  .surah-banner::before {
+    right: 0.65rem;
+  }
+
+  .surah-banner::after {
+    left: 0.65rem;
+  }
+
+  .surah-ornament {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    width: 2.4rem;
+    height: 2.4rem;
+    translate: 0 -50%;
+    rotate: 45deg;
+    border: 1px solid #777985;
+    background-color: #18181b;
+  }
+
+  .surah-ornament-right {
+    right: 28%;
+  }
+
+  .surah-ornament-left {
+    left: 28%;
+  }
+
+  .mushaf-page-number {
+    min-width: 5.25rem;
+    padding: 0.15rem 1.1rem 0.35rem;
+    text-align: center;
+    border: 1px solid #777985;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 3px #18181b, inset 0 0 0 4px #34353b;
+  }
+
+  @media (max-width: 390px) {
+    .mushaf-page-text {
+      font-size: clamp(1.7rem, 7.5cqw, 2.1rem);
+      line-height: 2.02;
+    }
+
+    .surah-banner::before,
+    .surah-banner::after {
+      width: 27%;
+    }
+  }
+}
+
 /* Hide scrollbar for a more app-like feel while keeping scroll */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
