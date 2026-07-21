@@ -260,63 +260,60 @@ function SurahReader({
     tafsirAyah !== null && tafsirData?.code === 200
       ? tafsirData.data.ayahs.find((a) => a.numberInSurah === tafsirAyah)?.text
       : null
+  const mushafPage = ayahs?.[0]?.page
+  const juz = ayahs?.[0]?.juz
 
   return (
-    <div className="mx-auto max-w-md px-4 pb-36 pt-4">
-      {/* Top bar */}
-      <header className="mb-3 flex items-center justify-between gap-2">
-        <button
-          type="button"
-          onClick={onBack}
-          className="flex items-center gap-1 rounded-full bg-card px-3 py-2 text-xs font-semibold shadow-sm ring-1 ring-border"
-        >
-          <ChevronRight className="h-4 w-4" />
-          الفهرس
-        </button>
+    <div className="quran-reader -mx-4 -mt-4 min-h-dvh bg-[#171719] px-5 pb-36 pt-5 text-[#e7e7ea] sm:px-8">
+      <header className="mb-10 flex items-start justify-between gap-3 text-[#85858f]">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onBack}
+            aria-label="العودة إلى فهرس السور"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-[#343439] bg-[#202023] text-[#d7d7dc] transition hover:bg-[#29292d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#85858f]"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+          <div className="text-right">
+            <h2 className="font-heading text-lg font-bold leading-tight text-[#d7d7dc]">
+              سورة {meta.name}
+            </h2>
+            <p className="text-xs">{meta.type === 'M' ? 'مكية' : 'مدنية'} · {toArabicDigits(meta.ayahs)} آية</p>
+          </div>
+        </div>
 
-        <button
-          type="button"
-          onClick={() => setShowTafsirPicker(true)}
-          className={cn(
-            'flex items-center gap-1.5 rounded-full px-3 py-2 text-xs font-semibold shadow-sm ring-1 transition',
-            tafsir !== 'none'
-              ? 'bg-primary text-primary-foreground ring-primary'
-              : 'bg-card ring-border',
-          )}
-        >
-          <BookOpen className="h-4 w-4" />
-          {tafsir !== 'none' ? tafsirLabel : 'التفسير'}
-        </button>
+        <div className="flex flex-col items-end gap-2">
+          {juz && <p className="font-heading text-lg font-bold">الجزء {toArabicDigits(juz)}</p>}
+          <button
+            type="button"
+            onClick={() => setShowTafsirPicker(true)}
+            className={cn(
+              'flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#85858f]',
+              tafsir !== 'none'
+                ? 'border-[#777781] bg-[#d7d7dc] text-[#171719]'
+                : 'border-[#343439] bg-[#202023] text-[#a8a8b0]',
+            )}
+          >
+            <BookOpen className="h-3.5 w-3.5" />
+            {tafsir !== 'none' ? tafsirLabel : 'التفسير'}
+          </button>
+        </div>
       </header>
-
-      {/* Surah header ornament */}
-      <div className="relative mb-1 overflow-hidden rounded-2xl border-2 border-gold/50 bg-card px-4 py-3 text-center shadow-sm">
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-10"
-          style={{ backgroundImage: 'url(/islamic-pattern.png)', backgroundSize: '160px' }}
-        />
-        <h2 className="relative font-heading text-2xl font-bold text-primary">
-          سُورَةُ {meta.name}
-        </h2>
-        <p className="relative mt-0.5 text-xs text-muted-foreground">
-          {meta.type === 'M' ? 'مكية' : 'مدنية'} · آياتها {toArabicDigits(meta.ayahs)}
-        </p>
-      </div>
 
       {isLoading && (
         <div className="flex h-60 items-center justify-center">
-          <Loader2 className="h-7 w-7 animate-spin text-primary" />
+          <Loader2 className="h-7 w-7 animate-spin text-[#a8a8b0]" />
         </div>
       )}
 
       {error && !ayahs && (
-        <div className="flex h-60 flex-col items-center justify-center gap-3">
-          <p className="text-sm text-muted-foreground">تعذّر تحميل السورة. تحقق من اتصالك.</p>
+        <div className="flex h-60 flex-col items-center justify-center gap-3 text-center">
+          <p className="text-sm text-[#a8a8b0]">تعذّر تحميل السورة. تحقق من اتصالك.</p>
           <button
             type="button"
             onClick={() => mutate()}
-            className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+            className="flex items-center gap-2 rounded-full bg-[#e7e7ea] px-4 py-2 text-sm font-semibold text-[#171719]"
           >
             <RefreshCw className="h-4 w-4" /> إعادة المحاولة
           </button>
@@ -324,19 +321,14 @@ function SurahReader({
       )}
 
       {ayahs && (
-        <article
-          dir="rtl"
-          className="rounded-2xl bg-card px-4 py-5 shadow-sm ring-1 ring-border"
-        >
-          {/* Bismillah (except Al-Fatiha where it's ayah 1, and At-Tawbah) */}
+        <article dir="rtl" className="mx-auto max-w-3xl">
           {surahNumber !== 1 && surahNumber !== 9 && (
-            <p className="mb-4 text-center font-quran text-2xl leading-relaxed text-foreground">
+            <p className="mb-8 text-center font-quran text-2xl leading-relaxed text-[#d7d7dc] sm:text-3xl">
               {BISMILLAH}
             </p>
           )}
 
-          {/* Continuous mushaf-style text */}
-          <p className="text-justify font-quran text-2xl leading-[2.4] text-foreground">
+          <p className="mushaf-text text-justify font-quran text-[1.8rem] leading-[2.35] text-[#e7e7ea] sm:text-[2.15rem] sm:leading-[2.45]">
             {ayahs.map((a) => {
               const text = stripBismillah(a.text, surahNumber, a.numberInSurah)
               const isActive = tafsirAyah === a.numberInSurah
@@ -360,13 +352,15 @@ function SurahReader({
                   }
                   className={cn(
                     'rounded-md transition-colors',
-                    tafsir !== 'none' && 'cursor-pointer hover:bg-primary/8',
-                    isActive && 'bg-gold/20',
+                    tafsir !== 'none' && 'cursor-pointer hover:bg-[#777781]/15',
+                    isActive && 'bg-[#777781]/20',
                   )}
                 >
                   {text}
-                  {/* Ayah-end ornament */}
-                  <span className="mx-1 inline-flex h-7 w-7 -translate-y-0.5 items-center justify-center rounded-full bg-primary/10 align-middle text-[0.65rem] font-bold text-primary ring-1 ring-primary/30">
+                  <span
+                    className="ayah-marker mx-1.5 inline-flex h-8 w-8 -translate-y-0.5 items-center justify-center align-middle font-sans text-[0.6rem] font-bold text-[#b2b2ba]"
+                    aria-label={`الآية ${toArabicDigits(a.numberInSurah)}`}
+                  >
                     {toArabicDigits(a.numberInSurah)}
                   </span>{' '}
                 </span>
@@ -375,21 +369,28 @@ function SurahReader({
           </p>
 
           {tafsir !== 'none' && (
-            <p className="mt-4 border-t border-border pt-3 text-center text-xs text-muted-foreground">
+            <p className="mt-8 border-t border-[#343439] pt-4 text-center text-xs text-[#85858f]">
               اضغط على أي آية لعرض تفسيرها
             </p>
+          )}
+
+          {mushafPage && (
+            <div className="mt-12 flex justify-center" aria-label={`صفحة ${toArabicDigits(mushafPage)}`}>
+              <span className="mushaf-page-number font-heading text-lg text-[#c7c7cd]">
+                {toArabicDigits(mushafPage)}
+              </span>
+            </div>
           )}
         </article>
       )}
 
-      {/* Prev / next surah nav */}
       {ayahs && (
-        <nav className="mt-4 flex items-center justify-between gap-2">
+        <nav className="mx-auto mt-10 flex max-w-3xl items-center justify-between gap-2 border-t border-[#2e2e32] pt-5">
           {surahNumber > 1 ? (
             <button
               type="button"
               onClick={() => onNavigate(surahNumber - 1)}
-              className="flex items-center gap-1 rounded-full bg-card px-4 py-2.5 text-xs font-semibold shadow-sm ring-1 ring-border"
+              className="flex items-center gap-1 rounded-full border border-[#343439] bg-[#202023] px-4 py-2.5 text-xs font-semibold text-[#c7c7cd] transition hover:bg-[#29292d]"
             >
               <ChevronRight className="h-4 w-4" />
               {SURAHS[surahNumber - 2].name}
@@ -401,7 +402,7 @@ function SurahReader({
             <button
               type="button"
               onClick={() => onNavigate(surahNumber + 1)}
-              className="flex items-center gap-1 rounded-full bg-card px-4 py-2.5 text-xs font-semibold shadow-sm ring-1 ring-border"
+              className="flex items-center gap-1 rounded-full border border-[#343439] bg-[#202023] px-4 py-2.5 text-xs font-semibold text-[#c7c7cd] transition hover:bg-[#29292d]"
             >
               {SURAHS[surahNumber].name}
               <ChevronLeft className="h-4 w-4" />
