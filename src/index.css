@@ -419,10 +419,82 @@
       font-size: clamp(1.35rem, 5.45cqw, 1.55rem);
       line-height: 2.05;
     }
+  }
 
-    .surah-banner::before,
-    .surah-banner::after {
-      width: 31%;
+  /* Vector ornament system — every decorative mark is an independent SVG. */
+  .mushaf-page-frame {
+    border: 1px solid rgb(207 207 207 / 28%);
+  }
+
+  .mushaf-corners .corner {
+    position: absolute;
+    width: clamp(3.5rem, 14vw, 6.5rem);
+    opacity: 0.72;
+  }
+
+  .corner-tl { left: -1px; top: -1px; }
+  .corner-tr { right: -1px; top: -1px; transform: scaleX(-1); }
+  .corner-bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
+  .corner-br { bottom: -1px; right: -1px; transform: scale(-1); }
+
+  .surah-banner {
+    min-height: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .surah-banner::before,
+  .surah-banner::after,
+  .surah-title::before,
+  .surah-title::after {
+    content: none;
+  }
+
+  .surah-banner img {
+    height: auto;
+    max-height: 7.5rem;
+    object-fit: contain;
+  }
+
+  .bismillah-divider {
+    width: min(100%, 30rem);
+    height: 2rem;
+    object-fit: contain;
+    opacity: 0.76;
+  }
+
+  .ayah-marker {
+    position: relative;
+    width: 2em;
+    height: 2em;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    color: #cfcfcf;
+    font-size: 0.38em;
+    font-variant-numeric: tabular-nums;
+    transform: translateY(-0.04em);
+  }
+
+  .ayah-marker::before,
+  .ayah-marker::after {
+    content: none;
+  }
+
+  .mushaf-page-number {
+    border-color: rgb(207 207 207 / 48%);
+    box-shadow: none;
+  }
+
+  @media (max-width: 390px) {
+    .mushaf-page-frame {
+      padding-inline: 1rem;
+    }
+
+    .bismillah-divider {
+      height: 1.5rem;
     }
   }
 }

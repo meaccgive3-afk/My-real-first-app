@@ -439,6 +439,7 @@ export function MushafReader({
 
   const headerSurah = groups?.[0]?.surah
   const juz = ayahs?.[0]?.juz
+  const hizbQuarter = ayahs?.[0]?.hizbQuarter
   const progress = (page / MUSHAF_PAGES) * 100
 
   return (
@@ -483,9 +484,15 @@ export function MushafReader({
           )}
           dir="rtl"
         >
-          <p className="font-sans text-base font-bold sm:text-lg">
-            {juz ? `الجزء ${JUZ_NAMES[juz - 1]}` : '\u00a0'}
-          </p>
+          <div className="flex items-center gap-2">
+            <Ornament src="/ornaments/juz-marker.svg" className="h-8 w-16" />
+            <p className="font-sans text-sm font-bold sm:text-base">
+              {juz ? `الجزء ${JUZ_NAMES[juz - 1]}` : '\u00a0'}
+            </p>
+            {hizbQuarter ? (
+              <Ornament src="/ornaments/hizb-marker.svg" className="h-7 w-7" />
+            ) : null}
+          </div>
           <div className="flex items-center gap-1">
             {isValidating && !isLoading && (
               <Loader2 className="h-3.5 w-3.5 animate-spin text-[#777985]" />
@@ -616,7 +623,7 @@ export function MushafReader({
               key={page}
               dir="rtl"
               className={cn(
-                'mushaf-content pt-4 sm:pt-5',
+                'mushaf-content mushaf-page-frame relative mt-4 px-4 pb-5 pt-5 sm:px-8 sm:pb-7 sm:pt-7',
                 !reducedMotion &&
                   dragX === 0 &&
                   direction === 'next' &&
@@ -637,6 +644,13 @@ export function MushafReader({
                   : {}),
               }}
             >
+              <div className="mushaf-corners pointer-events-none absolute inset-0" aria-hidden="true">
+                <Ornament src="/ornaments/page-corners.svg" className="corner corner-tl" />
+                <Ornament src="/ornaments/page-corners.svg" className="corner corner-tr" />
+                <Ornament src="/ornaments/page-corners.svg" className="corner corner-bl" />
+                <Ornament src="/ornaments/page-corners.svg" className="corner corner-br" />
+              </div>
+              <div className="relative">
               {groups.map((group) => {
                 const startsHere = group.ayahs[0].numberInSurah === 1
                 return (
@@ -682,10 +696,11 @@ export function MushafReader({
                               )}
                             </span>
                             <span
-                              className="ayah-marker mx-1.5 inline-flex items-center justify-center align-middle font-quran text-[#9A9CA6]"
+                              className="ayah-marker mx-1 inline-flex items-center justify-center align-middle font-quran"
                               aria-label={`الآية ${toArabicDigits(ayah.numberInSurah)}`}
                             >
-                              {toArabicDigits(ayah.numberInSurah)}
+                              <Ornament src="/ornaments/verse-marker.svg" className="absolute inset-0 size-full" />
+                              <span className="relative">{toArabicDigits(ayah.numberInSurah)}</span>
                             </span>
                             {isActive && (
                               <button
@@ -744,6 +759,7 @@ export function MushafReader({
                   />
                 </div>
               )}
+              </div>
             </article>
           )}
         </div>
@@ -752,20 +768,26 @@ export function MushafReader({
   )
 }
 
+function Ornament({ src, className }: { src: string; className?: string }) {
+  return <img src={src} className={className} alt="" aria-hidden="true" draggable={false} />
+}
+
 function SurahHeader({ name, showBismillah }: { name: string; showBismillah: boolean }) {
   return (
-    <div className="mb-3">
-      <div className="surah-banner relative flex items-center justify-center px-10 py-1.5">
-        <h3 className="surah-title relative z-10 bg-[#18181B] px-5 font-quran text-2xl text-[#E3E3E6] sm:text-3xl">
-          {'سُورَةُ '}
-          {name}
-        </h3>
+    <header className="mb-5">
+      <div className="surah-banner relative flex items-center justify-center">
+        <Ornament src="/ornaments/surah-title-frame.svg" className="w-full" />
+        <h3 className="sr-only">{'سورة '}{name}</h3>
       </div>
       {showBismillah && (
-        <p className="mt-3 text-center font-quran text-2xl leading-relaxed text-[#E3E3E6] sm:text-3xl">
-          {BISMILLAH}
-        </p>
+        <div className="mt-3 flex flex-col items-center gap-1">
+          <Ornament src="/ornaments/bismillah-divider.svg" className="bismillah-divider" />
+          <p className="text-center font-quran text-2xl leading-relaxed text-[#E3E3E6] sm:text-3xl">
+            {BISMILLAH}
+          </p>
+          <Ornament src="/ornaments/bismillah-divider.svg" className="bismillah-divider rotate-180" />
+        </div>
       )}
-    </div>
+    </header>
   )
 }
